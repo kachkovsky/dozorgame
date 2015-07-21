@@ -1,5 +1,6 @@
 package com.dozor.ui.game;
 
+import com.dozor.langs.LocaleBundle;
 import com.dozor.ui.send.GameEventsSender;
 
 /**
@@ -13,6 +14,9 @@ public class UpDownJPanel extends javax.swing.JPanel {
      */
     public UpDownJPanel() {
         initComponents();
+        jButtonDown.setText(LocaleBundle.getInstance().getString("buttonDown"));
+        jButtonUp.setText(LocaleBundle.getInstance().getString("buttonUp"));
+        jLabelParam.setText(LocaleBundle.getInstance().getString("layer"));
     }
 
     @Override

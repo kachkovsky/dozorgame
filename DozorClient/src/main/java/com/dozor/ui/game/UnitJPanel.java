@@ -20,6 +20,11 @@ public class UnitJPanel extends javax.swing.JPanel {
      */
     public UnitJPanel() {
         initComponents();
+        jLabelHp.setText(LocaleBundle.getInstance().getString("unit_hp"));
+        jLabelMp.setText(LocaleBundle.getInstance().getString("unit_mp"));
+        jLabelXp.setText(LocaleBundle.getInstance().getString("unit_xp"));
+        jLabelStage.setText(LocaleBundle.getInstance().getString("stage"));
+        jLabelTBPoints.setText(LocaleBundle.getInstance().getString("tribunal_points"));
     }
 
     private boolean fireable;
@@ -40,10 +45,6 @@ public class UnitJPanel extends javax.swing.JPanel {
         } else {
             this.setBackground(Colors.getInstance().getNormalUnitColor());
         }
-        jLabelHp.setText(LocaleBundle.getInstance().getString("unit_hp"));
-        jLabelMp.setText(LocaleBundle.getInstance().getString("unit_mp"));
-        jLabelXp.setText(LocaleBundle.getInstance().getString("unit_xp"));
-        jLabelStage.setText(LocaleBundle.getInstance().getString("stage"));
         jLabelHpText.setText("" + u.getHp());
         jLabelMpText.setText("" + u.getMp());
         jLabelXpText.setText("" + u.getXp());

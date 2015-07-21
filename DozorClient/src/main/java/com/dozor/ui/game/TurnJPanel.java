@@ -3,6 +3,7 @@ package com.dozor.ui.game;
 import com.dozor.game.beans.Game;
 import com.dozor.game.beans.TurnPosition;
 import com.dozor.game.beans.TurnPosition.PartOfTurn;
+import com.dozor.langs.LocaleBundle;
 import com.dozor.ui.DozorClient;
 import com.dozor.ui.send.GameEventsSender;
 import javax.swing.SwingUtilities;
@@ -18,6 +19,12 @@ public class TurnJPanel extends javax.swing.JPanel {
      */
     public TurnJPanel() {
         initComponents();
+        jButtonNewUnit.setText(LocaleBundle.getInstance().getString("NewUnit"));
+        jButtonManaUp.setText(LocaleBundle.getInstance().getString("ManaUp"));
+        jButtonXpUp.setText(LocaleBundle.getInstance().getString("XpUp"));
+        jButtonFire.setText(LocaleBundle.getInstance().getString("Fire"));
+        jButtonTribunal.setText(LocaleBundle.getInstance().getString("Tribunal"));
+        jButtonSkip.setText(LocaleBundle.getInstance().getString("Skip"));
     }
 
     private Game game;
