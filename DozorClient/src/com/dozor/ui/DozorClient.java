@@ -40,7 +40,7 @@ public class DozorClient extends javax.swing.JFrame {
         loginPanel.setCallback(new LoginPanel.Callback() {
 
             @Override
-            public void onSocketFirstDataSent(StringSocketClient socket) {
+            public void onSocketFirstDataSent(final StringSocketClient socket) {
                 DozorClient.this.socket = socket;
                 showProgress();
                 Thread t;
