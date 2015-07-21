@@ -16,21 +16,12 @@
         <module>DozorEngine</module>
         <module>DozorEngine/DozorEngineCore</module>
         <module>DozorEngine/DozorEngineServerCore</module>
+        <module>DozorEngine/GoogleJson</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>20141113</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
