@@ -3,6 +3,7 @@
 *.iws
 *.class
 
+out/
 
 # Maven
 log/
