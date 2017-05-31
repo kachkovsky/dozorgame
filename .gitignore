@@ -1,8 +1,9 @@
 # Intellij
 .idea/
 *.iws
-*.class
 *.iml
+*.class
+*.ipr
 
 out/
 
@@ -10,5 +11,8 @@ out/
 log/
 target/
 
-# gradle
-.gradle
+
+/.gradle/
+gradle/
+gradle-app.setting
+/build/
