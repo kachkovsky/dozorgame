@@ -4,11 +4,11 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 
 repositories {
-    compile project(":DozorGameCore")
-    compile project(":DozorEngine:DozorEngineServerCore")
     mavenCentral()
 }
 
 dependencies {
+    compile project(":DozorGameCore")
+    compile project(":DozorEngine:DozorEngineServerCore")
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
