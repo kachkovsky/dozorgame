@@ -3,9 +3,9 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
-
 repositories {
+    compile project(":DozorGameCore")
+    compile project(":DozorEngine:DozorEngineServerCore")
     mavenCentral()
 }
 

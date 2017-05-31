@@ -2,11 +2,43 @@ group 'com.dozor'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile project(":DozorClient")
+    compile project(":DozorGameCore")
+    compile project(":DozorGameServer")
+    compile project(":DozorEngine:DozorEngineCore")
+    compile project(":DozorEngine:DozorEngineServerCore")
+    compile project(":DozorEngine:GoogleJson")
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+
+def clientProjects = [':DozorClient',':DozorGameCore',':DozorEngine:DozorEngineCore',':DozorEngine:GoogleJson']
+task clientJar( type: Jar , dependsOn: clientProjects.collect{ it+":compileJava"}) {
+    manifest {
+        attributes 'Main-Class': 'com.client.Main'
+    }
+    baseName = 'jar'
+    subprojects.each { subproject ->
+        from subproject.sourceSets.main.output.classesDir
+        from subproject.sourceSets.main.output.resourcesDir
+    }
+}
+
+def serverProjects = [':DozorGameCore',':DozorEngine:DozorEngineCore',':DozorEngine:DozorEngineServerCore',':DozorEngine:GoogleJson']
+task serverJar( type: Jar , dependsOn: serverProjects.collect{ it+":compileJava"}) {
+    manifest {
+        attributes 'Main-Class': 'com.dozor.game.Main'
+    }
+    baseName = 'jar'
+    subprojects.each { subproject ->
+        from subproject.sourceSets.main.output.classesDir
+        from subproject.sourceSets.main.output.resourcesDir
+    }
 }
