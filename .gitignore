@@ -15,4 +15,4 @@ target/
 /.gradle/
 gradle/
 gradle-app.setting
-/build/
+build/
