@@ -93,7 +93,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jLabelSrvr.setText("Srever");
 
-        jTextHost.setText("46.0.15.47");
+        jTextHost.setText("127.0.0.1");
 
         jLabelPort.setText("Port");
 
