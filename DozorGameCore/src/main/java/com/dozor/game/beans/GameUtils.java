@@ -6,11 +6,11 @@ package com.dozor.game.beans;
 public class GameUtils {
 
     public static Player getCurrentPlayer(Game game) {
-        return game.getPlayers().get(game.getPosition().getPlayerIndex());
+        return game.getPlayers().get(game.getTurnPosition().getPlayerIndex());
     }
 
     public static Player getOtherPlayer(Game game) {
-        return game.getPlayers().get(getOtherPlayerIndex(game.getPosition().getPlayerIndex()));
+        return game.getPlayers().get(getOtherPlayerIndex(game.getTurnPosition().getPlayerIndex()));
     }
 
     public static int getOtherPlayerIndex(int index) {
@@ -18,7 +18,7 @@ public class GameUtils {
     }
 
     public static Unit getCurrentUnit(Game game) {
-        return getCurrentPlayer(game).getUnitsList().get(game.getPosition().getUnitIndex());
+        return getCurrentPlayer(game).getUnitsList().get(game.getTurnPosition().getUnitIndex());
     }
 
     public static boolean hasOtherPlayerUnitWithIdex(Game game, int unitIndex) {

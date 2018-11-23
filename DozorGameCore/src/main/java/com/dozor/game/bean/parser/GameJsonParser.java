@@ -30,7 +30,7 @@ public class GameJsonParser {
             players.put(playerObj);
         }
         gameObj.put(JsonGameConsts.PLAYERS, players);
-        gameObj.put(JsonGameConsts.TURN_POSITION, TurnPositionJsonParser.fromTurnPositionToJson(game.getPosition()));
+        gameObj.put(JsonGameConsts.TURN_POSITION, TurnPositionJsonParser.fromTurnPositionToJson(game.getTurnPosition()));
         return gameObj;
     }
 
@@ -46,7 +46,7 @@ public class GameJsonParser {
             p.setNick(po.optString(JsonConsts.NICK));
             g.getPlayers().add(p);
         }
-        g.setPosition(TurnPositionJsonParser.fromJsonToTurnPosition(gameObj.getJSONObject(JsonGameConsts.TURN_POSITION)));
+        g.setTurnPosition(TurnPositionJsonParser.fromJsonToTurnPosition(gameObj.getJSONObject(JsonGameConsts.TURN_POSITION)));
         return g;
     }
 

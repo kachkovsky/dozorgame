@@ -11,7 +11,7 @@ public class GameFactory {
         for (int i = 0; i < maxPlayers; i++) {
             g.getPlayers().add(PlayersFactory.createPlayer(i));
         }
-        g.setPosition(TurnPositionFactory.createDefaultTurnPosition());
+        g.setTurnPosition(TurnPositionFactory.createDefaultTurnPosition());
         g.setFinished(false);
         return g;
     }

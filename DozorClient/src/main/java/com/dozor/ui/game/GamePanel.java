@@ -39,13 +39,13 @@ public class GamePanel extends javax.swing.JPanel {
         jLabelInfo.setText(String.format(LocaleBundle.getInstance().getString("game_info"),
                 session,
                 PlayerColorUtils.getColorByIndex(currentPlayerIndex),
-                game.getPlayers().get(game.getPosition().getPlayerIndex()).getNick(),
-                game.getPosition().getPartOfTurn().name()));
+                game.getPlayers().get(game.getTurnPosition().getPlayerIndex()).getNick(),
+                game.getTurnPosition().getPartOfTurn().name()));
         playerJPanel1.setPlayer(game, 0);
         playerJPanel2.setPlayer(game, 1);
         turnJPanel1.showByGame(game, currentPlayerIndex);
-        if(game.getPosition().getPlayerIndex()==currentPlayerIndex){
-            if(TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(game.getPosition().getPartOfTurn())){
+        if(game.getTurnPosition().getPlayerIndex()==currentPlayerIndex){
+            if(TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(game.getTurnPosition().getPartOfTurn())){
                 setTribunalableUnits();
             }
         }
@@ -53,7 +53,7 @@ public class GamePanel extends javax.swing.JPanel {
 
     public void setFireable() {
         int stage = GameUtils.getCurrentUnit(game).getStage();
-        if (game.getPosition().getPlayerIndex() == 0) {
+        if (game.getTurnPosition().getPlayerIndex() == 0) {
             playerJPanel2.setFireable(stage);
         } else {
             playerJPanel1.setFireable(stage);
@@ -61,7 +61,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     public void setSendPointsFromPanels(){
-        if (game.getPosition().getPlayerIndex() == 0) {
+        if (game.getTurnPosition().getPlayerIndex() == 0) {
             playerJPanel2.setSendPointsFromPanels(GameUtils.getOtherPlayer(game).getUnitsList().size());
         } else {
             playerJPanel1.setSendPointsFromPanels(GameUtils.getOtherPlayer(game).getUnitsList().size());
@@ -69,7 +69,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
     
     public void setTribunalableUnits() {
-        if (game.getPosition().getPlayerIndex() == 0) {
+        if (game.getTurnPosition().getPlayerIndex() == 0) {
             playerJPanel2.setTribunalableUnits();
         } else {
             playerJPanel1.setTribunalableUnits();

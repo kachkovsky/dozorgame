@@ -32,8 +32,8 @@ public class TurnJPanel extends javax.swing.JPanel {
     public void showByGame(Game game, int currentPlayerIndex) {
         this.game = game;
         hideAll();
-        if (game.getPosition().getPlayerIndex() == currentPlayerIndex) {
-            TurnPosition.PartOfTurn partOfTurn = game.getPosition().getPartOfTurn();
+        if (game.getTurnPosition().getPlayerIndex() == currentPlayerIndex) {
+            TurnPosition.PartOfTurn partOfTurn = game.getTurnPosition().getPartOfTurn();
             switch (partOfTurn) {
                 case NORMAL:
                     jButtonFire.setEnabled(true);
@@ -55,7 +55,7 @@ public class TurnJPanel extends javax.swing.JPanel {
                 default:
                     throw new AssertionError(partOfTurn.name());
             }
-        } else if (PartOfTurn.TRIBUNAL_POINTS.equals(game.getPosition().getPartOfTurn())) {
+        } else if (PartOfTurn.TRIBUNAL_POINTS.equals(game.getTurnPosition().getPartOfTurn())) {
             jButtonTribunal.setEnabled(true);
         }
     }
@@ -203,7 +203,7 @@ public class TurnJPanel extends javax.swing.JPanel {
 
     private void jButtonTribunalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTribunalActionPerformed
 
-        switch (game.getPosition().getPartOfTurn()) {
+        switch (game.getTurnPosition().getPartOfTurn()) {
             case NORMAL:
                 break;
             case BEFORE_TRIBUNAL:
@@ -216,7 +216,7 @@ public class TurnJPanel extends javax.swing.JPanel {
             case TRIBUNAL_KILL:
                 break;
             default:
-                throw new AssertionError(game.getPosition().getPartOfTurn().name());
+                throw new AssertionError(game.getTurnPosition().getPartOfTurn().name());
         }
 
     }//GEN-LAST:event_jButtonTribunalActionPerformed

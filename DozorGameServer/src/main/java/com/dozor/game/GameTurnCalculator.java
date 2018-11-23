@@ -26,12 +26,12 @@ public class GameTurnCalculator {
             return null;
         }
 
-        if ((game.getPosition().getPlayerIndex() != playerIndex) ^ TurnPosition.PartOfTurn.TRIBUNAL_POINTS.equals(game.getPosition().getPartOfTurn())) {
+        if ((game.getTurnPosition().getPlayerIndex() != playerIndex) ^ TurnPosition.PartOfTurn.TRIBUNAL_POINTS.equals(game.getTurnPosition().getPartOfTurn())) {
             return null;
         }
         switch (action.getAction()) {
             case NEW_UNIT:
-                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 if (GameUtils.getCurrentUnit(game).getMp() < UnitsCalculator.getMpForNewUnit(GameUtils.getCurrentPlayer(game).getUnitsList())) {
@@ -39,12 +39,12 @@ public class GameTurnCalculator {
                 }
                 break;
             case UP_XP:
-                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 break;
             case UP_MP:
-                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 if (GameUtils.getCurrentUnit(game).getStage() != 0) {
@@ -52,7 +52,7 @@ public class GameTurnCalculator {
                 }
                 break;
             case UP_STAGE: {
-                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 Unit unit = GameUtils.getCurrentUnit(game);
@@ -62,7 +62,7 @@ public class GameTurnCalculator {
             }
             break;
             case DOWN_STAGE: {
-                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 Unit unit = GameUtils.getCurrentUnit(game);
@@ -72,7 +72,7 @@ public class GameTurnCalculator {
             }
             break;
             case FIRE:
-                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.NORMAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 if (GameUtils.getCurrentUnit(game).getMp() < 3) {
@@ -86,7 +86,7 @@ public class GameTurnCalculator {
                 }
                 break;
             case CHOOSE_TRIBUNAL:
-                if (!TurnPosition.PartOfTurn.BEFORE_TRIBUNAL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.BEFORE_TRIBUNAL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 if (GameUtils.getCurrentPlayer(game).getEvidences() < GameConsts.TRIBUNAL_POINTS_OF_ONE) {
@@ -94,7 +94,7 @@ public class GameTurnCalculator {
                 }
                 break;
             case SEND_TRIBUNAL_UNIT_POINTS:
-                if (!TurnPosition.PartOfTurn.TRIBUNAL_POINTS.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.TRIBUNAL_POINTS.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 if (action.getPointsList() == null) {
@@ -116,7 +116,7 @@ public class GameTurnCalculator {
                 }
                 break;
             case TRIBUNAL_KILL:
-                if (!TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(game.getPosition().getPartOfTurn())) {
+                if (!TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 if (GameUtils.hasOtherPlayerUnitWithIdex(game, action.getUnitIndex())) {
@@ -128,7 +128,7 @@ public class GameTurnCalculator {
                 break;
             case NOTHING:
                 EnumSet normalParts = EnumSet.of(PartOfTurn.NORMAL, PartOfTurn.BEFORE_TRIBUNAL);
-                if (!normalParts.contains(game.getPosition().getPartOfTurn())) {
+                if (!normalParts.contains(game.getTurnPosition().getPartOfTurn())) {
                     return null;
                 }
                 break;
@@ -148,13 +148,13 @@ public class GameTurnCalculator {
             case NEW_UNIT:
                 current.setMp(current.getMp() - UnitsCalculator.getMpForNewUnit(GameUtils.getCurrentPlayer(game).getUnitsList()));
                 GameUtils.getCurrentPlayer(game).getUnitsList().add(0, UnitsFactory.createNewUnit());
-                game.getPosition().setUnitIndex(game.getPosition().getUnitIndex() + 1);
+                game.getTurnPosition().setUnitIndex(game.getTurnPosition().getUnitIndex() + 1);
                 break;
             case UP_XP:
                 current.setXp(current.getXp() + current.getStage() + 1);
                 Player other = GameUtils.getOtherPlayer(game);
                 other.setEvidences(other.getEvidences()
-                        + EvidencesCalculator.caclulateXpEvidences(GameUtils.getCurrentPlayer(game).getUnitsList(), game.getPosition().getUnitIndex(), other.getUnitsList()));
+                        + EvidencesCalculator.caclulateXpEvidences(GameUtils.getCurrentPlayer(game).getUnitsList(), game.getTurnPosition().getUnitIndex(), other.getUnitsList()));
                 break;
             case UP_MP:
                 current.setMp(current.getMp() + LevelCalculator.getLevelByExp(current.getXp()));
@@ -171,7 +171,7 @@ public class GameTurnCalculator {
                 current.setMp(current.getMp() - 3);
                 other = GameUtils.getOtherPlayer(game);
                 other.setEvidences(other.getEvidences()
-                        + EvidencesCalculator.caclulateEvidences(GameUtils.getCurrentPlayer(game).getUnitsList(), game.getPosition().getUnitIndex(), other.getUnitsList(), action.getUnitIndex()));
+                        + EvidencesCalculator.caclulateEvidences(GameUtils.getCurrentPlayer(game).getUnitsList(), game.getTurnPosition().getUnitIndex(), other.getUnitsList(), action.getUnitIndex()));
                 Unit u = GameUtils.getOtherPlayer(game).getUnitsList().get(action.getUnitIndex());
                 if (u.getHp() == 1) {
                     GameUtils.getOtherPlayer(game).getUnitsList().remove(action.getUnitIndex());
@@ -202,7 +202,7 @@ public class GameTurnCalculator {
             game.setFinished(true);
             return;
         }
-        switch (game.getPosition().getPartOfTurn()) {
+        switch (game.getTurnPosition().getPartOfTurn()) {
             case NORMAL:
                 Unit current = GameUtils.getCurrentUnit(game);
                 if (current.getStage() > 0 && !EnumSet.of(ActionType.DOWN_STAGE, ActionType.UP_STAGE).contains(action.getAction())) {
@@ -222,7 +222,7 @@ public class GameTurnCalculator {
                     if (GameUtils.getCurrentPlayer(game).getEvidences() < GameConsts.TRIBUNAL_POINTS_OF_ONE) {
                         nextPlayer();
                     } else {
-                        game.getPosition().setPartOfTurn(TurnPosition.PartOfTurn.BEFORE_TRIBUNAL);
+                        game.getTurnPosition().setPartOfTurn(TurnPosition.PartOfTurn.BEFORE_TRIBUNAL);
                     }
                 }
                 break;
@@ -230,11 +230,11 @@ public class GameTurnCalculator {
                 if (ActionType.NOTHING.equals(action.getAction())) {
                     nextPlayer();
                 } else {
-                    game.getPosition().setPartOfTurn(TurnPosition.PartOfTurn.TRIBUNAL_POINTS);
+                    game.getTurnPosition().setPartOfTurn(TurnPosition.PartOfTurn.TRIBUNAL_POINTS);
                 }
                 break;
             case TRIBUNAL_POINTS:
-                game.getPosition().setPartOfTurn(TurnPosition.PartOfTurn.TRIBUNAL_KILL);
+                game.getTurnPosition().setPartOfTurn(TurnPosition.PartOfTurn.TRIBUNAL_KILL);
                 break;
             case TRIBUNAL_KILL:
                 for (Unit u : GameUtils.getOtherPlayer(game).getUnitsList()) {
@@ -243,7 +243,7 @@ public class GameTurnCalculator {
                 nextPlayer();
                 break;
             default:
-                throw new AssertionError(game.getPosition().getPartOfTurn().name());
+                throw new AssertionError(game.getTurnPosition().getPartOfTurn().name());
         }
         if (calcGameFinished()) {
             game.setFinished(true);
@@ -252,7 +252,7 @@ public class GameTurnCalculator {
     }
 
     private boolean nextUnitOrFalse() {
-        TurnPosition position = game.getPosition();
+        TurnPosition position = game.getTurnPosition();
         if (position.getUnitIndex() < GameUtils.getCurrentPlayer(game).getUnitsList().size() - 1) {
             position.setUnitIndex(position.getUnitIndex() + 1);
             return true;
@@ -262,7 +262,7 @@ public class GameTurnCalculator {
     }
 
     private void nextPlayer() {
-        TurnPosition position = game.getPosition();
+        TurnPosition position = game.getTurnPosition();
         position.setPlayerIndex(GameUtils.getOtherPlayerIndex(position.getPlayerIndex()));
         position.setUnitIndex(0);
         position.setPartOfTurn(PartOfTurn.NORMAL);

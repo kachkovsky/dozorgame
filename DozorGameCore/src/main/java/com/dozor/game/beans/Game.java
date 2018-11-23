@@ -10,7 +10,7 @@ public class Game {
 
     private boolean finished = false;
     private List<Player> players = new ArrayList<>();
-    private TurnPosition position;
+    private TurnPosition turnPosition;
 
     public boolean isFinished() {
         return finished;
@@ -24,12 +24,12 @@ public class Game {
         return players;
     }
 
-    public TurnPosition getPosition() {
-        return position;
+    public TurnPosition getTurnPosition() {
+        return turnPosition;
     }
 
-    public void setPosition(TurnPosition position) {
-        this.position = position;
+    public void setTurnPosition(TurnPosition turnPosition) {
+        this.turnPosition = turnPosition;
     }
 
 

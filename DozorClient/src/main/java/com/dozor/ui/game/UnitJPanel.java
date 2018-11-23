@@ -40,7 +40,7 @@ public class UnitJPanel extends javax.swing.JPanel {
         this.game = game;
         this.unitIndex = unitIndex;
         u = game.getPlayers().get(playerIndex).getUnitsList().get(unitIndex);
-        if (game.getPosition().getPlayerIndex() == playerIndex && game.getPosition().getUnitIndex() == unitIndex) {
+        if (game.getTurnPosition().getPlayerIndex() == playerIndex && game.getTurnPosition().getUnitIndex() == unitIndex) {
             this.setBackground(Colors.getInstance().getCurrentUnitColor());
         } else {
             this.setBackground(Colors.getInstance().getNormalUnitColor());
