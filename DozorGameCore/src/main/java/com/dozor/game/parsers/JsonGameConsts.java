@@ -23,4 +23,6 @@ public class JsonGameConsts {
 
     public static final String PLAYER_INDEX = "playerIndex";
     public static final String PART_OF_TURN = "partOfTurn";
+
+    public static final String GAME = "game";
 }

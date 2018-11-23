@@ -2,7 +2,9 @@ package com.dozor.ui;
 
 import com.dozor.game.bean.parser.GameJsonParser;
 import com.dozor.game.beans.Game;
+import com.dozor.game.parsers.JsonGameConsts;
 import com.dozor.langs.LocaleBundle;
+import com.dozor.utils.JacksonUtils;
 import com.dozorengine.serverinteraction.StringSocketClient;
 import com.dozor.serverinteraction.bean.Errors;
 import com.dozor.serverinteraction.bean.ResponseTypes;
@@ -74,7 +76,8 @@ public class DozorClient extends javax.swing.JFrame {
                                                 firstReceive = false;
                                                 DozorClient.this.setExtendedState(DozorClient.this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
                                             }
-                                            Game game = GameJsonParser.fromJsonToGame(object);
+                                            Game game = JacksonUtils.parseJsonString(Game.class, object.getString(JsonGameConsts.GAME));
+                                            //Game game = GameJsonParser.fromJsonToGame(object);
                                             if (game.isFinished()) {
                                                 showFinishedDialog(LocaleBundle.getInstance().getString("info_game_finish"));
                                                 socket.closeAll();

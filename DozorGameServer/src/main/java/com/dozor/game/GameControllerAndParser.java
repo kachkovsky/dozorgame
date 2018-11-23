@@ -6,6 +6,7 @@ import com.dozor.game.bean.parser.GameJsonParser;
 import com.dozor.game.beans.Game;
 import com.dozor.game.beans.action.Action;
 import com.dozor.game.beansfactory.GameFactory;
+import com.dozor.game.parsers.JsonGameConsts;
 import com.dozor.serverinteraction.bean.ResponseTypes;
 import com.dozorengine.server.Session;
 import com.dozorengine.server.gamecontroller.GameDataReceiver;
@@ -63,7 +64,9 @@ public class GameControllerAndParser implements GameDataReceiver {
                 game = g;
             }
         }
-        JSONObject jsonObj = GameJsonParser.fromGameToJson(game, session.getUsers());
+        JSONObject jsonObj = new JSONObject();
+        JSONObject gameJsonObj = GameJsonParser.fromGameToJson(game, session.getUsers());
+        jsonObj.put(JsonGameConsts.GAME, gameJsonObj);
         GameResultBeanParser.addGameResultBeanDataToJson(jsonObj, turn);
         session.sendString(jsonObj.toString());
     }
