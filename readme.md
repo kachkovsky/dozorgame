@@ -18,7 +18,7 @@ $ java -jar build\libs\Server-1.0-SNAPSHOT.jar
 ### Client
 Build client:
 ```sh
-$ gradle clientJar
+$ gradle processResources clientJar
 ```
 and run
 ```sh
