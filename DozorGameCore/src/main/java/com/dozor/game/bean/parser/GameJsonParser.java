@@ -1,6 +1,6 @@
 package com.dozor.game.bean.parser;
 
-import com.dozor.game.beans.Game;
+import com.dozor.game.beans.GameState;
 import com.dozor.game.beans.Player;
 import com.dozor.game.parsers.JsonGameConsts;
 import com.dozorengine.server.bean.INick;
@@ -16,26 +16,26 @@ import java.util.List;
  */
 public class GameJsonParser {
 
-    public static JSONObject fromGameToJson(Game game, List<? extends INick> users) throws JSONException {
+    public static JSONObject fromGameToJson(GameState gameState, List<? extends INick> users) throws JSONException {
         JSONObject gameObj = new JSONObject();
-        gameObj.put(JsonGameConsts.GAME_FINISHED, game.isFinished());
+        gameObj.put(JsonGameConsts.GAME_FINISHED, gameState.isFinished());
         JSONArray players = new JSONArray();
-        for (int i = 0; i < game.getPlayers().size(); i++) {
+        for (int i = 0; i < gameState.getPlayers().size(); i++) {
             JSONObject playerObj = new JSONObject();
             if (users != null) {
                 playerObj.put(JsonConsts.NICK, users.get(i).getNick());
             }
-            playerObj.put(JsonGameConsts.EVIDENCES, game.getPlayers().get(i).getEvidences());
-            playerObj.put(JsonGameConsts.UNITS, UnitJsonParser.fromUnitListToJsonArray(game.getPlayers().get(i).getUnitsList()));
+            playerObj.put(JsonGameConsts.EVIDENCES, gameState.getPlayers().get(i).getEvidences());
+            playerObj.put(JsonGameConsts.UNITS, UnitJsonParser.fromUnitListToJsonArray(gameState.getPlayers().get(i).getUnitsList()));
             players.put(playerObj);
         }
         gameObj.put(JsonGameConsts.PLAYERS, players);
-        gameObj.put(JsonGameConsts.TURN_POSITION, TurnPositionJsonParser.fromTurnPositionToJson(game.getTurnPosition()));
+        gameObj.put(JsonGameConsts.TURN_POSITION, TurnPositionJsonParser.fromTurnPositionToJson(gameState.getTurnPosition()));
         return gameObj;
     }
 
-    public static Game fromJsonToGame(JSONObject gameObj) throws JSONException {
-        Game g = new Game();
+    public static GameState fromJsonToGame(JSONObject gameObj) throws JSONException {
+        GameState g = new GameState();
         g.setFinished(gameObj.getBoolean(JsonGameConsts.GAME_FINISHED));
         JSONArray playersArr = gameObj.getJSONArray(JsonGameConsts.PLAYERS);
         for (int i = 0; i < playersArr.length(); i++) {

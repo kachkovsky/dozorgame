@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author IGOR-K
  */
-public class Game {
+public class GameState {
 
     private boolean finished = false;
     private List<Player> players = new ArrayList<>();

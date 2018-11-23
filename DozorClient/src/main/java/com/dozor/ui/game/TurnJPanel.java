@@ -1,6 +1,6 @@
 package com.dozor.ui.game;
 
-import com.dozor.game.beans.Game;
+import com.dozor.game.beans.GameState;
 import com.dozor.game.beans.TurnPosition;
 import com.dozor.game.beans.TurnPosition.PartOfTurn;
 import com.dozor.langs.LocaleBundle;
@@ -27,13 +27,13 @@ public class TurnJPanel extends javax.swing.JPanel {
         jButtonSkip.setText(LocaleBundle.getInstance().getString("Skip"));
     }
 
-    private Game game;
+    private GameState gameState;
 
-    public void showByGame(Game game, int currentPlayerIndex) {
-        this.game = game;
+    public void showByGame(GameState gameState, int currentPlayerIndex) {
+        this.gameState = gameState;
         hideAll();
-        if (game.getTurnPosition().getPlayerIndex() == currentPlayerIndex) {
-            TurnPosition.PartOfTurn partOfTurn = game.getTurnPosition().getPartOfTurn();
+        if (gameState.getTurnPosition().getPlayerIndex() == currentPlayerIndex) {
+            TurnPosition.PartOfTurn partOfTurn = gameState.getTurnPosition().getPartOfTurn();
             switch (partOfTurn) {
                 case NORMAL:
                     jButtonFire.setEnabled(true);
@@ -55,7 +55,7 @@ public class TurnJPanel extends javax.swing.JPanel {
                 default:
                     throw new AssertionError(partOfTurn.name());
             }
-        } else if (PartOfTurn.TRIBUNAL_POINTS.equals(game.getTurnPosition().getPartOfTurn())) {
+        } else if (PartOfTurn.TRIBUNAL_POINTS.equals(gameState.getTurnPosition().getPartOfTurn())) {
             jButtonTribunal.setEnabled(true);
         }
     }
@@ -203,7 +203,7 @@ public class TurnJPanel extends javax.swing.JPanel {
 
     private void jButtonTribunalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTribunalActionPerformed
 
-        switch (game.getTurnPosition().getPartOfTurn()) {
+        switch (gameState.getTurnPosition().getPartOfTurn()) {
             case NORMAL:
                 break;
             case BEFORE_TRIBUNAL:
@@ -216,7 +216,7 @@ public class TurnJPanel extends javax.swing.JPanel {
             case TRIBUNAL_KILL:
                 break;
             default:
-                throw new AssertionError(game.getTurnPosition().getPartOfTurn().name());
+                throw new AssertionError(gameState.getTurnPosition().getPartOfTurn().name());
         }
 
     }//GEN-LAST:event_jButtonTribunalActionPerformed

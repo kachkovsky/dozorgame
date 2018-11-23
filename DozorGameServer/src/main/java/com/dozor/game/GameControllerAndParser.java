@@ -3,7 +3,7 @@ package com.dozor.game;
 import com.dozor.game.Errors.ErrorsJsonFactory;
 import com.dozor.game.bean.parser.FromJsonToActionParser;
 import com.dozor.game.bean.parser.GameJsonParser;
-import com.dozor.game.beans.Game;
+import com.dozor.game.beans.GameState;
 import com.dozor.game.beans.action.Action;
 import com.dozor.game.beansfactory.GameFactory;
 import com.dozor.game.parsers.JsonGameConsts;
@@ -23,12 +23,12 @@ public class GameControllerAndParser implements GameDataReceiver {
 
     private final GameTurnCalculator turnCalculator = new GameTurnCalculator();
     private final Session session;
-    private volatile Game game;
+    private volatile GameState gameState;
     private GameResultBean turn;
 
     public GameControllerAndParser(Session session) {
         this.session = session;
-        game = GameFactory.createGame(session.getMaxUsers());
+        gameState = GameFactory.createGame(session.getMaxUsers());
         turn = new GameResultBean();
         turn.setTypeOfData(ResponseTypes.TURN.name());
     }
@@ -46,7 +46,7 @@ public class GameControllerAndParser implements GameDataReceiver {
 
     @Override
     public boolean isGameFinished() {
-        return game.isFinished();
+        return gameState.isFinished();
     }
 
     @Override
@@ -56,16 +56,16 @@ public class GameControllerAndParser implements GameDataReceiver {
 
     private synchronized void turn(boolean needToCalc, StringSocketClient client, Action action, int player) throws JSONException {
         if (needToCalc) {
-            Game g = turnCalculator.calcTurn(game, action, player);
+            GameState g = turnCalculator.calcTurn(gameState, action, player);
             if (g == null) {
                 client.sendString(ErrorsJsonFactory.createErrorIncorrectTurn().toString());
                 return;
             } else {
-                game = g;
+                gameState = g;
             }
         }
         JSONObject jsonObj = new JSONObject();
-        JSONObject gameJsonObj = GameJsonParser.fromGameToJson(game, session.getUsers());
+        JSONObject gameJsonObj = GameJsonParser.fromGameToJson(gameState, session.getUsers());
         jsonObj.put(JsonGameConsts.GAME, gameJsonObj);
         GameResultBeanParser.addGameResultBeanDataToJson(jsonObj, turn);
         session.sendString(jsonObj.toString());

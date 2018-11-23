@@ -1,13 +1,13 @@
 package com.dozor.game.beansfactory;
 
-import com.dozor.game.beans.Game;
+import com.dozor.game.beans.GameState;
 
 /**
  * @author IGOR-K
  */
 public class GameFactory {
-    public static Game createGame(int maxPlayers) {
-        Game g = new Game();
+    public static GameState createGame(int maxPlayers) {
+        GameState g = new GameState();
         for (int i = 0; i < maxPlayers; i++) {
             g.getPlayers().add(PlayersFactory.createPlayer(i));
         }

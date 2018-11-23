@@ -19,7 +19,7 @@ public class TestGameJFrame extends javax.swing.JFrame {
      */
     public TestGameJFrame() {
         initComponents();
-        gamePanel1.setGame(GameFactory.createGame(2));
+        gamePanel1.setGameState(GameFactory.createGame(2));
         setSize(800,800);      
     }
 

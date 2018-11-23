@@ -1,6 +1,6 @@
 package com.dozor.ui.game;
 
-import com.dozor.game.beans.Game;
+import com.dozor.game.beans.GameState;
 import com.dozor.game.beans.GameUtils;
 import com.dozor.game.beans.Unit;
 import com.dozor.game.utils.LevelCalculator;
@@ -32,15 +32,15 @@ public class UnitJPanel extends javax.swing.JPanel {
     private int unitIndex;
 
     private Unit u;
-    private Game game;
+    private GameState gameState;
 
-    public void setUnit(Game game, int playerIndex, int unitIndex) {
+    public void setUnit(GameState gameState, int playerIndex, int unitIndex) {
         fireable = false;
         tribunalable = false;
-        this.game = game;
+        this.gameState = gameState;
         this.unitIndex = unitIndex;
-        u = game.getPlayers().get(playerIndex).getUnitsList().get(unitIndex);
-        if (game.getTurnPosition().getPlayerIndex() == playerIndex && game.getTurnPosition().getUnitIndex() == unitIndex) {
+        u = gameState.getPlayers().get(playerIndex).getUnitsList().get(unitIndex);
+        if (gameState.getTurnPosition().getPlayerIndex() == playerIndex && gameState.getTurnPosition().getUnitIndex() == unitIndex) {
             this.setBackground(Colors.getInstance().getCurrentUnitColor());
         } else {
             this.setBackground(Colors.getInstance().getNormalUnitColor());
@@ -59,7 +59,7 @@ public class UnitJPanel extends javax.swing.JPanel {
     }
 
     public void setTribunalable() {
-        int evidences = GameUtils.getCurrentPlayer(game).getEvidences();
+        int evidences = GameUtils.getCurrentPlayer(gameState).getEvidences();
         if (u.getTribunalPoints().compareTo(evidences) < 0) {
             tribunalable = true;
         }

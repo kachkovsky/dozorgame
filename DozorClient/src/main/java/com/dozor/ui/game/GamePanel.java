@@ -1,6 +1,6 @@
 package com.dozor.ui.game;
 
-import com.dozor.game.beans.Game;
+import com.dozor.game.beans.GameState;
 import com.dozor.game.beans.GameUtils;
 import com.dozor.game.beans.TurnPosition;
 import com.dozor.langs.LocaleBundle;
@@ -21,7 +21,7 @@ public class GamePanel extends javax.swing.JPanel {
         initZeroComponents();
     }
 
-    private Game game;
+    private GameState gameState;
     private int session;
     private int currentPlayerIndex;
 
@@ -33,27 +33,27 @@ public class GamePanel extends javax.swing.JPanel {
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
 
         jLabelInfo.setText(String.format(LocaleBundle.getInstance().getString("game_info"),
                 session,
                 PlayerColorUtils.getColorByIndex(currentPlayerIndex),
-                game.getPlayers().get(game.getTurnPosition().getPlayerIndex()).getNick(),
-                game.getTurnPosition().getPartOfTurn().name()));
-        playerJPanel1.setPlayer(game, 0);
-        playerJPanel2.setPlayer(game, 1);
-        turnJPanel1.showByGame(game, currentPlayerIndex);
-        if(game.getTurnPosition().getPlayerIndex()==currentPlayerIndex){
-            if(TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(game.getTurnPosition().getPartOfTurn())){
+                gameState.getPlayers().get(gameState.getTurnPosition().getPlayerIndex()).getNick(),
+                gameState.getTurnPosition().getPartOfTurn().name()));
+        playerJPanel1.setPlayer(gameState, 0);
+        playerJPanel2.setPlayer(gameState, 1);
+        turnJPanel1.showByGame(gameState, currentPlayerIndex);
+        if(gameState.getTurnPosition().getPlayerIndex()==currentPlayerIndex){
+            if(TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(gameState.getTurnPosition().getPartOfTurn())){
                 setTribunalableUnits();
             }
         }
     }
 
     public void setFireable() {
-        int stage = GameUtils.getCurrentUnit(game).getStage();
-        if (game.getTurnPosition().getPlayerIndex() == 0) {
+        int stage = GameUtils.getCurrentUnit(gameState).getStage();
+        if (gameState.getTurnPosition().getPlayerIndex() == 0) {
             playerJPanel2.setFireable(stage);
         } else {
             playerJPanel1.setFireable(stage);
@@ -61,15 +61,15 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     public void setSendPointsFromPanels(){
-        if (game.getTurnPosition().getPlayerIndex() == 0) {
-            playerJPanel2.setSendPointsFromPanels(GameUtils.getOtherPlayer(game).getUnitsList().size());
+        if (gameState.getTurnPosition().getPlayerIndex() == 0) {
+            playerJPanel2.setSendPointsFromPanels(GameUtils.getOtherPlayer(gameState).getUnitsList().size());
         } else {
-            playerJPanel1.setSendPointsFromPanels(GameUtils.getOtherPlayer(game).getUnitsList().size());
+            playerJPanel1.setSendPointsFromPanels(GameUtils.getOtherPlayer(gameState).getUnitsList().size());
         }
     }
     
     public void setTribunalableUnits() {
-        if (game.getTurnPosition().getPlayerIndex() == 0) {
+        if (gameState.getTurnPosition().getPlayerIndex() == 0) {
             playerJPanel2.setTribunalableUnits();
         } else {
             playerJPanel1.setTribunalableUnits();

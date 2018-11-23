@@ -1,13 +1,10 @@
 package com.dozor.ui.game;
 
-import com.dozor.game.beans.Game;
-import com.dozor.game.beans.GameUtils;
-import com.dozor.game.beans.Unit;
+import com.dozor.game.beans.GameState;
 import com.dozor.langs.LocaleBundle;
 import com.dozor.ui.Dialogs;
 import com.dozor.ui.send.GameEventsSender;
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -63,14 +60,14 @@ public class PlayerJPanel extends javax.swing.JPanel {
         }
     }
 
-    public void setPlayer(Game game, int playerIndex) {
+    public void setPlayer(GameState gameState, int playerIndex) {
         jLabelInfo.setText(String.format(LocaleBundle.getInstance().getString("player_info"),
-                game.getPlayers().get(playerIndex).getNick(),
-                game.getPlayers().get(playerIndex).getEvidences()));
+                gameState.getPlayers().get(playerIndex).getNick(),
+                gameState.getPlayers().get(playerIndex).getEvidences()));
         jPanelUnits.removeAll();
-        for (int i = 0; i < game.getPlayers().get(playerIndex).getUnitsList().size(); i++) {
+        for (int i = 0; i < gameState.getPlayers().get(playerIndex).getUnitsList().size(); i++) {
             UnitJPanel up = new UnitJPanel();
-            up.setUnit(game, playerIndex, i);
+            up.setUnit(gameState, playerIndex, i);
             jPanelUnits.add(up);
         }
         this.revalidate();
