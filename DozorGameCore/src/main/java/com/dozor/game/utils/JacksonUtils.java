@@ -1,4 +1,5 @@
-package com.dozor.utils;
+package com.dozor.game.utils;
+
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,5 +19,10 @@ public class JacksonUtils {
     public static <T> T parseJsonString(Class<T> clazz, String jsonString) throws IOException {
         ObjectMapper objectMapper = OBJECT_MAPPER_THREAD_LOCAL.get();
         return objectMapper.readValue(jsonString, clazz);
+    }
+
+    public static String objectToJson(Object object) throws IOException {
+        ObjectMapper objectMapper = OBJECT_MAPPER_THREAD_LOCAL.get();
+        return objectMapper.writeValueAsString(object);
     }
 }

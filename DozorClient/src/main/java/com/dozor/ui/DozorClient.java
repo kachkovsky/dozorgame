@@ -1,9 +1,10 @@
 package com.dozor.ui;
 
+import com.dozor.game.beans.ActionResult;
 import com.dozor.game.beans.GameState;
 import com.dozor.game.parsers.JsonGameConsts;
+import com.dozor.game.utils.JacksonUtils;
 import com.dozor.langs.LocaleBundle;
-import com.dozor.utils.JacksonUtils;
 import com.dozorengine.serverinteraction.StringSocketClient;
 import com.dozor.serverinteraction.bean.Errors;
 import com.dozor.serverinteraction.bean.ResponseTypes;
@@ -11,6 +12,7 @@ import com.dozorengine.serverinteraction.bean.SessionResultBean;
 import com.dozor.serverinteraction.parsers.JsonToGameResultBeanParser;
 import com.dozor.serverinteraction.parsers.ResultSessionBeanToParser;
 import com.dozor.ui.send.GameEventsSender;
+
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Font;
@@ -21,10 +23,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+
 import org.json.JSONObject;
 
 /**
- *
  * @author IGOR-K
  */
 public class DozorClient extends javax.swing.JFrame {
@@ -63,7 +65,7 @@ public class DozorClient extends javax.swing.JFrame {
                                         case WAITING_FOR_USERS:
                                             showProgress();
                                             SessionResultBean result = ResultSessionBeanToParser.resultSessionFromJson(object);
-                                            if(result.getSessionPlayerIndex()>1){
+                                            if (result.getSessionPlayerIndex() > 1) {
                                                 result.setSessionPlayerIndex(-1);
                                             }
                                             busyPanel.setSessionResultBean(result);
@@ -75,15 +77,28 @@ public class DozorClient extends javax.swing.JFrame {
                                                 firstReceive = false;
                                                 DozorClient.this.setExtendedState(DozorClient.this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
                                             }
-                                            GameState gameState = JacksonUtils.parseJsonString(GameState.class, object.getString(JsonGameConsts.GAME));
-                                            //GameState gameState = GameJsonParser.fromJsonToGame(object);
-                                            if (gameState.isFinished()) {
-                                                showFinishedDialog(LocaleBundle.getInstance().getString("info_game_finish"));
-                                                socket.closeAll();
-                                                System.exit(0);
+                                            ActionResult actionResult = JacksonUtils.parseJsonString(ActionResult.class, object.getString(JsonGameConsts.GAME));
+                                            if (actionResult.getErrorCode() != null) {
+                                                String errorText;
+                                                if (LocaleBundle.getInstance().containsKey(actionResult.getErrorCode())) {
+                                                    errorText = LocaleBundle.getInstance().getString(actionResult.getErrorCode());
+                                                } else {
+                                                    errorText = actionResult.getErrorCode();
+                                                }
+                                                Dialogs.showServErrDialog(DozorClient.this, errorText);
+                                            } else if (actionResult.getGameState() == null) {
+                                                Dialogs.showServErrDialog(DozorClient.this, "No game state!");
                                             } else {
-                                                gamePanel.setGameState(gameState);
-                                                showGame();
+                                                GameState gameState = actionResult.getGameState();
+                                                //GameState gameState = GameJsonParser.fromJsonToGame(object);
+                                                if (gameState.isFinished()) {
+                                                    showFinishedDialog(LocaleBundle.getInstance().getString("info_game_finish"));
+                                                    socket.closeAll();
+                                                    System.exit(0);
+                                                } else {
+                                                    gamePanel.setGameState(gameState);
+                                                    showGame();
+                                                }
                                             }
                                             break;
                                         default:

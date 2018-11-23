@@ -3,10 +3,12 @@ package com.dozor.game;
 import com.dozor.game.Errors.ErrorsJsonFactory;
 import com.dozor.game.bean.parser.FromJsonToActionParser;
 import com.dozor.game.bean.parser.GameJsonParser;
+import com.dozor.game.beans.ActionResult;
 import com.dozor.game.beans.GameState;
 import com.dozor.game.beans.action.Action;
 import com.dozor.game.beansfactory.GameFactory;
 import com.dozor.game.parsers.JsonGameConsts;
+import com.dozor.game.utils.JacksonUtils;
 import com.dozor.serverinteraction.bean.ResponseTypes;
 import com.dozorengine.server.Session;
 import com.dozorengine.server.gamecontroller.GameDataReceiver;
@@ -55,17 +57,29 @@ public class GameControllerAndParser implements GameDataReceiver {
     }
 
     private synchronized void turn(boolean needToCalc, StringSocketClient client, Action action, int player) throws JSONException {
+        ActionResult ar = null;
         if (needToCalc) {
-            GameState g = turnCalculator.calcTurn(gameState, action, player);
-            if (g == null) {
+            ar = turnCalculator.calcTurn(gameState, action, player);
+            if (ar == null) {
                 client.sendString(ErrorsJsonFactory.createErrorIncorrectTurn().toString());
                 return;
-            } else {
-                gameState = g;
+            } else if (ar.getGameState() != null) {
+                gameState = ar.getGameState();
             }
         }
+        if (ar == null) {
+            ar = new ActionResult(gameState);
+        }
+        String result;
+        try {
+            result = JacksonUtils.objectToJson(ar);
+        } catch (Exception e) {
+            client.sendString(ErrorsJsonFactory.createErrorIncorrectTurn().toString());
+            return;
+        }
+
         JSONObject jsonObj = new JSONObject();
-        JSONObject gameJsonObj = GameJsonParser.fromGameToJson(gameState, session.getUsers());
+        JSONObject gameJsonObj = new JSONObject(result);
         jsonObj.put(JsonGameConsts.GAME, gameJsonObj);
         GameResultBeanParser.addGameResultBeanDataToJson(jsonObj, turn);
         session.sendString(jsonObj.toString());

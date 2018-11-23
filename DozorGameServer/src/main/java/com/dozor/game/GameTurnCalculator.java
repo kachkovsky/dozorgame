@@ -13,6 +13,8 @@ import org.json.JSONException;
 
 import java.util.EnumSet;
 
+import static com.dozor.serverinteraction.bean.Errors.*;
+
 /**
  * @author IGOR-K
  */
@@ -21,125 +23,131 @@ public class GameTurnCalculator {
     private GameState gameState;
 
     //false if turn incorret
-    public GameState calcTurn(GameState gameState, Action action, int playerIndex) throws JSONException {
+    public ActionResult calcTurn(GameState gameState, Action action, int playerIndex) throws JSONException {
         if (playerIndex < 0 || playerIndex > 1) {
-            return null;
+            return ActionResult.create(ERROR_PLAYER_INDEX_DOES_NOT_EXISTS);
         }
 
         if ((gameState.getTurnPosition().getPlayerIndex() != playerIndex) ^ TurnPosition.PartOfTurn.TRIBUNAL_POINTS.equals(gameState.getTurnPosition().getPartOfTurn())) {
-            return null;
+            if (gameState.getTurnPosition().getPlayerIndex() != playerIndex) {
+                return ActionResult.create(ERROR_INCORRECT_PLAYER_INDEX_WHILE_CALC_TRIBUNAL_POINTS);
+            } else {
+                return ActionResult.create(ERROR_INCORRECT_TIME_FOR_TRIBUNAL_POINTS);
+            }
         }
         switch (action.getAction()) {
             case NEW_UNIT:
                 if (!TurnPosition.PartOfTurn.NORMAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 if (GameUtils.getCurrentUnit(gameState).getMp() < UnitsCalculator.getMpForNewUnit(GameUtils.getCurrentPlayer(gameState).getUnitsList())) {
-                    return null;
+                    return ActionResult.create(ERROR_LITTLE_MANA);
                 }
                 break;
             case UP_XP:
                 if (!TurnPosition.PartOfTurn.NORMAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 break;
             case UP_MP:
                 if (!TurnPosition.PartOfTurn.NORMAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 if (GameUtils.getCurrentUnit(gameState).getStage() != 0) {
-                    return null;
+                    return ActionResult.create(ERROR_UP_MP_NOT_ON_ZERO_FLOOR);
                 }
                 break;
             case UP_STAGE: {
                 if (!TurnPosition.PartOfTurn.NORMAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 Unit unit = GameUtils.getCurrentUnit(gameState);
-                if (unit.getStage() == 0 || unit.getMp() < unit.getStage()) {
-                    return null;
+                if (unit.getStage() == 0) {
+                    return ActionResult.create(ERROR_FLOOR_IS_ZERO);
+                } else if (unit.getMp() < unit.getStage()) {
+                    return ActionResult.create(ERROR_LITTLE_MANA);
                 }
             }
             break;
             case DOWN_STAGE: {
                 if (!TurnPosition.PartOfTurn.NORMAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 Unit unit = GameUtils.getCurrentUnit(gameState);
                 if (unit.getMp() <= unit.getStage()) {
-                    return null;
+                    return ActionResult.create(ERROR_LITTLE_MANA);
                 }
             }
             break;
             case FIRE:
                 if (!TurnPosition.PartOfTurn.NORMAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 if (GameUtils.getCurrentUnit(gameState).getMp() < 3) {
-                    return null;
+                    return ActionResult.create(ERROR_LITTLE_MANA);
                 }
                 if (GameUtils.hasOtherPlayerUnitWithIdex(gameState, action.getUnitIndex())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_UNIT_INDEX);
                 }
                 if (GameUtils.getCurrentUnit(gameState).getStage() < GameUtils.getOtherPlayer(gameState).getUnitsList().get(action.getUnitIndex()).getStage()) {
-                    return null;
+                    return ActionResult.create(ERROR_UNIT_INVISIBLE_BECAUSE_LEVEL);
                 }
                 break;
             case CHOOSE_TRIBUNAL:
                 if (!TurnPosition.PartOfTurn.BEFORE_TRIBUNAL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 if (GameUtils.getCurrentPlayer(gameState).getEvidences() < GameConsts.TRIBUNAL_POINTS_OF_ONE) {
-                    return null;
+                    return ActionResult.create(ERROR_FEW_EVIDENCES);
                 }
                 break;
             case SEND_TRIBUNAL_UNIT_POINTS:
                 if (!TurnPosition.PartOfTurn.TRIBUNAL_POINTS.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 if (action.getPointsList() == null) {
-                    return null;
+                    return ActionResult.create(ERROR_TRIBUNAL_NEED_POINTS_LIST);
                 }
                 if (GameUtils.getOtherPlayer(gameState).getUnitsList().size() != action.getPointsList().size()) {
-                    return null;
+                    return ActionResult.create(ERROR_TRIBUNAL_NOT_ALL_POINTS_LIST);
                 }
                 int sum = 0;
                 for (int value : action.getPointsList()) {
                     if (value < 0) {
-                        return null;
+                        return ActionResult.create(ERROR_TRIBUNAL_POINT_LESS_THAN_ZERO);
                     }
                     sum += value;
                 }
 
                 if (sum != GameUtils.getOtherPlayer(gameState).getUnitsList().size() * GameConsts.TRIBUNAL_POINTS_OF_ONE) {
-                    return null;
+                    return ActionResult.create(ERROR_TRIBUNAL_POINT_INCORRECT_SUM);
                 }
                 break;
             case TRIBUNAL_KILL:
                 if (!TurnPosition.PartOfTurn.TRIBUNAL_KILL.equals(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 if (GameUtils.hasOtherPlayerUnitWithIdex(gameState, action.getUnitIndex())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_UNIT_INDEX);
                 }
                 if (GameUtils.getCurrentPlayer(gameState).getEvidences() < GameUtils.getOtherPlayer(gameState).getUnitsList().get(action.getUnitIndex()).getTribunalPoints()) {
-                    return null;
+                    return ActionResult.create(ERROR_FEW_EVIDENCES);
                 }
                 break;
             case NOTHING:
                 EnumSet normalParts = EnumSet.of(PartOfTurn.NORMAL, PartOfTurn.BEFORE_TRIBUNAL);
                 if (!normalParts.contains(gameState.getTurnPosition().getPartOfTurn())) {
-                    return null;
+                    return ActionResult.create(ERROR_INCORRECT_PART_OF_TURN);
                 }
                 break;
             default:
-                return null;
+                return ActionResult.create(ERROR_INCORRECT_ACTION_TYPE);
         }
         //deep clone
         this.gameState = GameJsonParser.fromJsonToGame(GameJsonParser.fromGameToJson(gameState, null));
         doAct(action, playerIndex);
         turnTrigger(action, playerIndex);
-        return this.gameState;
+        return new ActionResult(this.gameState);
     }
 
     private void doAct(Action action, int playerIndex) {
