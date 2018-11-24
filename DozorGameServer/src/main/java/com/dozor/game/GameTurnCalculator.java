@@ -1,6 +1,5 @@
 package com.dozor.game;
 
-import com.dozor.game.bean.parser.GameJsonParser;
 import com.dozor.game.beans.*;
 import com.dozor.game.beans.TurnPosition.PartOfTurn;
 import com.dozor.game.beans.action.Action;
@@ -10,12 +9,11 @@ import com.dozor.game.utils.EvidencesCalculator;
 import com.dozor.game.utils.JacksonUtils;
 import com.dozor.game.utils.LevelCalculator;
 import com.dozor.game.utils.UnitsCalculator;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.EnumSet;
 
-import static com.dozor.serverinteraction.bean.Errors.*;
+import static com.dozor.serverinteraction.bean.ActionErrors.*;
 
 /**
  * @author IGOR-K

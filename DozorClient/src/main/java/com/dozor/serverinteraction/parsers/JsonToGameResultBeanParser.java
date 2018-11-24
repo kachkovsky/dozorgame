@@ -1,6 +1,6 @@
 package com.dozor.serverinteraction.parsers;
 
-import com.dozor.serverinteraction.bean.Errors;
+import com.dozor.serverinteraction.bean.ActionErrors;
 import com.dozor.serverinteraction.bean.ResponseTypes;
 import com.dozorengine.serverinteraction.parsers.JsonConsts;
 import com.dozorengine.utils.EnumUtils;
@@ -19,9 +19,9 @@ public class JsonToGameResultBeanParser {
         return null;
     }
 
-    public static Errors getErrors(JSONObject o) throws JSONException {
+    public static ActionErrors getErrors(JSONObject o) throws JSONException {
         if (o.has(JsonConsts.ERROR)) {
-            return EnumUtils.getEnum(Errors.class, o.getString(JsonConsts.ERROR));
+            return EnumUtils.getEnum(ActionErrors.class, o.getString(JsonConsts.ERROR));
         }
         return null;
     }

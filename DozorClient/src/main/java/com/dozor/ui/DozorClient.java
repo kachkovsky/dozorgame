@@ -6,7 +6,7 @@ import com.dozor.game.parsers.JsonGameConsts;
 import com.dozor.game.utils.JacksonUtils;
 import com.dozor.langs.LocaleBundle;
 import com.dozorengine.serverinteraction.StringSocketClient;
-import com.dozor.serverinteraction.bean.Errors;
+import com.dozor.serverinteraction.bean.ActionErrors;
 import com.dozor.serverinteraction.bean.ResponseTypes;
 import com.dozorengine.serverinteraction.bean.SessionResultBean;
 import com.dozor.serverinteraction.parsers.JsonToGameResultBeanParser;
@@ -59,8 +59,8 @@ public class DozorClient extends javax.swing.JFrame {
                                 JSONObject object = new JSONObject(receiveString);
                                 ResponseTypes responseType = JsonToGameResultBeanParser.getResponseType(object);
                                 if (responseType != null) {
-                                    Errors errors = JsonToGameResultBeanParser.getErrors(object);
-                                    Dialogs.showServErrDialogIfNeeded(DozorClient.this, errors);
+                                    ActionErrors actionErrors = JsonToGameResultBeanParser.getErrors(object);
+                                    Dialogs.showServErrDialogIfNeeded(DozorClient.this, actionErrors);
                                     switch (responseType) {
                                         case WAITING_FOR_USERS:
                                             showProgress();
@@ -85,7 +85,7 @@ public class DozorClient extends javax.swing.JFrame {
                                                 } else {
                                                     errorText = actionResult.getErrorCode();
                                                 }
-                                                Dialogs.showServErrDialog(DozorClient.this, errorText);
+                                                Dialogs.showActionsErrDialog(DozorClient.this, errorText);
                                             } else if (actionResult.getGameState() == null) {
                                                 Dialogs.showServErrDialog(DozorClient.this, "No game state!");
                                             } else {

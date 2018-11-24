@@ -1,7 +1,7 @@
 package com.dozor.ui;
 
 import com.dozor.langs.LocaleBundle;
-import com.dozor.serverinteraction.bean.Errors;
+import com.dozor.serverinteraction.bean.ActionErrors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class Dialogs {
 
-    public static boolean showServErrDialogIfNeeded(Component parent, Errors errors) {
+    public static boolean showServErrDialogIfNeeded(Component parent, ActionErrors errors) {
         if (errors != null) {
             showServErrDialog(parent, errors);
             return true;
@@ -19,7 +19,7 @@ public class Dialogs {
         return false;
     }
 
-    public static void showServErrDialog(Component parent, Errors errors) {
+    public static void showServErrDialog(Component parent, ActionErrors errors) {
         JOptionPane.showMessageDialog(parent,
                 errors.name(),
                 LocaleBundle.getInstance().getString("serv_error"),
@@ -37,6 +37,13 @@ public class Dialogs {
         JOptionPane.showMessageDialog(parent,
                 text,
                 caption,
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showActionsErrDialog(Component parent, String text) {
+        JOptionPane.showMessageDialog(parent,
+                text,
+                LocaleBundle.getInstance().getString("action_err"),
                 JOptionPane.ERROR_MESSAGE);
     }
 }

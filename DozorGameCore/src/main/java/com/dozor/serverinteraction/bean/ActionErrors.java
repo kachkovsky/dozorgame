@@ -3,7 +3,7 @@ package com.dozor.serverinteraction.bean;
 /**
  * @author IGOR-K
  */
-public enum Errors {
+public enum ActionErrors {
     ERROR_PLAYER_INDEX_DOES_NOT_EXISTS,
     ERROR_INCORRECT_PLAYER_INDEX_WHILE_CALC_TRIBUNAL_POINTS,
     ERROR_INCORRECT_TIME_FOR_TRIBUNAL_POINTS,
