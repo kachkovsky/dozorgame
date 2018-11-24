@@ -33,6 +33,9 @@ public class GameControllerAndParser implements GameDataReceiver {
     public GameControllerAndParser(Session session) {
         this.session = session;
         gameState = GameFactory.createGame(session.getMaxUsers());
+        for (int i = 0; i < gameState.getPlayers().size(); i++) {
+            gameState.getPlayers().get(i).setNick(session.getUsers().get(i).getNick());
+        }
         turn = new GameResultBean();
         turn.setTypeOfData(ResponseTypes.TURN.name());
     }
@@ -85,7 +88,7 @@ public class GameControllerAndParser implements GameDataReceiver {
         GameResultBeanParser.addGameResultBeanDataToJson(jsonObj, turn);
         if (ar.getGameState() != null) {
             session.sendString(jsonObj.toString());
-        } else{
+        } else {
             client.sendString(jsonObj.toString());
         }
     }
