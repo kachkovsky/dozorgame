@@ -7,10 +7,12 @@ import com.dozor.game.beans.action.Action;
 import com.dozor.game.beans.action.Action.ActionType;
 import com.dozor.game.beansfactory.UnitsFactory;
 import com.dozor.game.utils.EvidencesCalculator;
+import com.dozor.game.utils.JacksonUtils;
 import com.dozor.game.utils.LevelCalculator;
 import com.dozor.game.utils.UnitsCalculator;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.EnumSet;
 
 import static com.dozor.serverinteraction.bean.Errors.*;
@@ -23,7 +25,7 @@ public class GameTurnCalculator {
     private GameState gameState;
 
     //false if turn incorret
-    public ActionResult calcTurn(GameState gameState, Action action, int playerIndex) throws JSONException {
+    public ActionResult calcTurn(GameState gameState, Action action, int playerIndex) throws IOException {
         if (playerIndex < 0 || playerIndex > 1) {
             return ActionResult.create(ERROR_PLAYER_INDEX_DOES_NOT_EXISTS);
         }
@@ -144,7 +146,8 @@ public class GameTurnCalculator {
                 return ActionResult.create(ERROR_INCORRECT_ACTION_TYPE);
         }
         //deep clone
-        this.gameState = GameJsonParser.fromJsonToGame(GameJsonParser.fromGameToJson(gameState, null));
+        this.gameState = JacksonUtils.parseJsonString(GameState.class,JacksonUtils.objectToJson(gameState));
+                //GameJsonParser.fromJsonToGame(GameJsonParser.fromGameToJson(gameState, null));
         doAct(action, playerIndex);
         turnTrigger(action, playerIndex);
         return new ActionResult(this.gameState);

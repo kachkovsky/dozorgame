@@ -8,6 +8,9 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    jacksonVersion = '2.8.5'
+}
 dependencies {
     compile project(":DozorClient")
     compile project(":DozorGameCore")
@@ -29,6 +32,7 @@ task clientJar( type: Jar , dependsOn: clientProjects.collect{ it+":compileJava"
     subprojects.each { subproject ->
         from subproject.sourceSets.main.output.classesDir
         from subproject.sourceSets.main.output.resourcesDir
+        from subproject.configurations.runtime.collect { zipTree(it) }
     }
 }
 
@@ -41,5 +45,6 @@ task serverJar( type: Jar , dependsOn: serverProjects.collect{ it+":compileJava"
     subprojects.each { subproject ->
         from subproject.sourceSets.main.output.classesDir
         from subproject.sourceSets.main.output.resourcesDir
+        from subproject.configurations.runtime.collect { zipTree(it) }
     }
 }

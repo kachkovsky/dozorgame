@@ -18,6 +18,8 @@ import com.dozorengine.serverinteraction.parsers.GameResultBeanParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 /**
  * @author IGOR-K
  */
@@ -52,11 +54,11 @@ public class GameControllerAndParser implements GameDataReceiver {
     }
 
     @Override
-    public void calculateAndSendStartData() throws JSONException {
+    public void calculateAndSendStartData() throws JSONException, IOException {
         turn(false, null, null, 0);
     }
 
-    private synchronized void turn(boolean needToCalc, StringSocketClient client, Action action, int player) throws JSONException {
+    private synchronized void turn(boolean needToCalc, StringSocketClient client, Action action, int player) throws JSONException, IOException {
         ActionResult ar = null;
         if (needToCalc) {
             ar = turnCalculator.calcTurn(gameState, action, player);

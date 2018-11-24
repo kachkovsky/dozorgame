@@ -4,6 +4,9 @@ public class ActionResult {
     private GameState gameState;
     private String errorCode;
 
+    public ActionResult() {
+    }
+
     public ActionResult(GameState gameState) {
         this.gameState = gameState;
     }
