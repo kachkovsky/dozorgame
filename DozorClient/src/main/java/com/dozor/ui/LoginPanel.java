@@ -25,7 +25,7 @@ public class LoginPanel extends javax.swing.JPanel {
         initComponents();
         try {
             NickProperties p = NickProperties.getInstance();
-            if(!p.getProperties().isEmpty()) {
+            if (!p.getProperties().isEmpty()) {
                 jTextHost.setText(p.getProperty(NickProperties.HOST));
                 jTextPort.setText(p.getProperty(NickProperties.PORT));
                 jTextFieldNick.setText(p.getProperty(NickProperties.NICK));
@@ -87,8 +87,6 @@ public class LoginPanel extends javax.swing.JPanel {
         jLabelNick.setText("Nick");
 
         jLabelSesId.setText("Session ID");
-
-        jTextSessionId.setText("0");
 
         jButtonCreateSession.setText("Create");
         jButtonCreateSession.addActionListener(new java.awt.event.ActionListener() {
@@ -224,23 +222,32 @@ public class LoginPanel extends javax.swing.JPanel {
         JoinSessionBean jsb = new JoinSessionBean();
         jsb.setLogin(jTextFieldLogin.getText());
         jsb.setNick(jTextFieldNick.getText());
-        jsb.setSessionNumber(Integer.valueOf(jTextSessionId.getText()));
-
+        boolean canJoin = false;
         try {
-            cs = new StringSocketClient(jTextHost.getText(), Integer.valueOf(jTextPort.getText()));
-            cs.setLogging(AppConfig.DEBUG_JSONS);
-            cs.init();
-            String data = JoinSessionBeanToParser.toJson(jsb).toString();
-
-            cs.sendString(data);
-        } catch (Exception ex) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
-            cs.closeAll();
-            System.exit(-1);
+            jsb.setSessionNumber(Integer.valueOf(jTextSessionId.getText()));
+            canJoin = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Dialogs.showErrDialog(this,
+                    LocaleBundle.getInstance().getString("no_session_to_join"),
+                    LocaleBundle.getInstance().getString("client_error"));
         }
+        if (canJoin) {
+            try {
+                cs = new StringSocketClient(jTextHost.getText(), Integer.valueOf(jTextPort.getText()));
+                cs.setLogging(AppConfig.DEBUG_JSONS);
+                cs.init();
+                String data = JoinSessionBeanToParser.toJson(jsb).toString();
 
-        callback.onSocketFirstDataSent(cs);
+                cs.sendString(data);
+            } catch (Exception ex) {
+                Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
+                cs.closeAll();
+                System.exit(-1);
+            }
 
+            callback.onSocketFirstDataSent(cs);
+        }
     }//GEN-LAST:event_jButtonJoinSessionActionPerformed
 
     public void saveInputsToDisk() {
