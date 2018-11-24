@@ -60,7 +60,7 @@ public class UnitJPanel extends javax.swing.JPanel {
 
     public void setTribunalable() {
         int evidences = GameUtils.getCurrentPlayer(gameState).getEvidences();
-        if (u.getTribunalPoints().compareTo(evidences) < 0) {
+        if (u.getTribunalPoints().compareTo(evidences) <= 0) {
             tribunalable = true;
         }
         updateColor();
