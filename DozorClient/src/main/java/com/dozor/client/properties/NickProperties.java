@@ -3,6 +3,7 @@ package com.dozor.client.properties;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,12 +17,15 @@ public class NickProperties {
         return property;
     }
 
+    public static final String HOST = "PROP_HOST";
+    public static final String PORT = "PROP_PORT";
+    public static final String NICK = "PROP_NICK";
+
     private final String local_dir = System.getProperty("user.dir");
     private final String file_separator = System.getProperty("file.separator");
-    private final String file_path = local_dir + file_separator + "server.properties";
+    private final String file_path = local_dir + file_separator + "nick.properties";
 
-
-    private Map<String, String> properties;
+    Properties properties = new Properties();
 
     private NickProperties() {
         try {
@@ -32,29 +36,32 @@ public class NickProperties {
     }
 
     private void init() throws IOException {
+
         File file = new File(file_path);
         if (!(file).exists()) {
             System.err.println("No Config File!!!");
             System.err.println(file_path);
         }
-
-        properties = new HashMap();
-
         BufferedReader br = new BufferedReader(new FileReader(file));
-
-        String eachLine = br.readLine();
-
-        while (eachLine != null) {
-            //System.out.println(eachLine);
-            String[] arr = eachLine.split("=");
-            if (arr.length == 2)
-                properties.put(arr[0].trim(), arr[1].trim());
-            eachLine = br.readLine();
-        }
-
+        properties.load(br);
+        br.close();
     }
 
     public String getProperty(String propertyName) {
-        return properties.get(propertyName);
+        return (String) properties.get(propertyName);
+    }
+
+    public void putProperty(String propertyName, String property) {
+        properties.setProperty(propertyName, property);
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void saveProperties() throws IOException {
+        try (FileOutputStream output = new FileOutputStream(file_path)) {
+            properties.store(output, null);
+        }
     }
 }

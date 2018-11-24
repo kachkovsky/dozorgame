@@ -52,6 +52,7 @@ public class DozorClient extends javax.swing.JFrame {
                     @Override
                     public void run() {
                         boolean firstReceive = true;
+                        boolean firstReceive_WAITING_FOR_USERS = true;
                         GameEventsSender.changeSender(socket);
                         while (!finished && !socket.isClosed()) {
                             try {
@@ -67,6 +68,10 @@ public class DozorClient extends javax.swing.JFrame {
                                             SessionResultBean result = ResultSessionBeanToParser.resultSessionFromJson(object);
                                             if (result.getSessionPlayerIndex() > 1) {
                                                 result.setSessionPlayerIndex(-1);
+                                            }
+                                            if (firstReceive_WAITING_FOR_USERS) {
+                                                firstReceive_WAITING_FOR_USERS = false;
+                                                loginPanel.saveInputsToDisk();
                                             }
                                             busyPanel.setSessionResultBean(result);
                                             gamePanel.setSession(result.getSessionNumber());
