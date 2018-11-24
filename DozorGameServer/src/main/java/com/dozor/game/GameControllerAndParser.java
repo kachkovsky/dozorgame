@@ -79,11 +79,14 @@ public class GameControllerAndParser implements GameDataReceiver {
             client.sendString(ErrorsJsonFactory.createErrorIncorrectTurn().toString());
             return;
         }
-
         JSONObject jsonObj = new JSONObject();
         JSONObject gameJsonObj = new JSONObject(result);
         jsonObj.put(JsonGameConsts.GAME, gameJsonObj);
         GameResultBeanParser.addGameResultBeanDataToJson(jsonObj, turn);
-        session.sendString(jsonObj.toString());
+        if (ar.getGameState() != null) {
+            session.sendString(jsonObj.toString());
+        } else{
+            client.sendString(jsonObj.toString());
+        }
     }
 }
