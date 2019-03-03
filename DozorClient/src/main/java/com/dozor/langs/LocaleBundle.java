@@ -16,10 +16,10 @@ public class LocaleBundle {
     static {
         ResourceBundle bundle;
         try {
-            bundle = ResourceBundle.getBundle("com.dozor.langs.locales.Words", new Locale("ru", "RU"));
+            bundle = ResourceBundle.getBundle("com.dozor.langs.locales.Words", new Locale("ru", "RU"), UTF_8_CONTROL);
         } catch (MissingResourceException e) {
             e.printStackTrace();
-            bundle = ResourceBundle.getBundle("com.dozor.langs.locales.Words", new Locale("ru", "RU"), UTF_8_CONTROL);
+            bundle = ResourceBundle.getBundle("com.dozor.langs.locales.Words", new Locale("ru", "RU"));
         }
         SELF = bundle;
     }
